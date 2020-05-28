@@ -16,7 +16,7 @@ class LocationScraper
   def fetch_usernames
     login
     browser.get(Location.last.link)
-    puts 'Fetching last 100 unique usernames. Please wait it may take a while'
+    puts 'Fetching last 100 unique usernames. Please wait, this may take a while'
     collect_usernames while usernames.size < 100
     browser.quit
     save_to_csv
