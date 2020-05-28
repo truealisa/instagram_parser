@@ -31,4 +31,23 @@ RSpec.describe LocationScraper do
       expect(subject.instance_variable_get(:@post_links)).to eq([])
     end
   end
+
+  describe '#fetch_usernames' do
+    before do
+      allow(subject).to receive(:collect_usernames) do
+        subject.instance_variable_set(:@usernames, (0...100).to_a)
+      end
+    end
+    let(:location) { create(:location) }
+
+    it 'performs fetching' do
+      expect(subject).to receive(:login)
+      expect_any_instance_of(Selenium::WebDriver::Firefox::Marionette::Driver).to receive(:get)
+        .with(location.link)
+      expect(subject).to receive(:collect_usernames)
+      expect_any_instance_of(Selenium::WebDriver::Firefox::Marionette::Driver).to receive(:quit)
+      expect(subject).to receive(:save_to_csv)
+      subject.fetch_usernames
+    end
+  end
 end
